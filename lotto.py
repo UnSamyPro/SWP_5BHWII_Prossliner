@@ -1,31 +1,24 @@
 import random
 
 
-def main():
-    numbers = list(range(1, 46))
-    statistic = {}
+def main(max_numbers=45, count_per_draw=6, max_draws=1000):
+    numbers = [i for i in range(0, max_numbers)]
+    statistic = {k: 0 for k in range(0, max_numbers)}
 
-    for i in range(1, 46):
-        statistic[i] = 0
+    for _ in range(0, max_draws):
+        for num in run(numbers, max_numbers, count_per_draw):
+            statistic[num] += 1
 
-    for i in range(0, 1000):
-        for e in run(numbers):
-            statistic[e] = statistic[e] + 1
-
-    print(statistic)
+    return statistic
 
 
-def run(numbers):
-    for i in range(0, 5):
-        rand_index = random.randint(0, 44 - i)
-        rand_element = numbers[rand_index]
-        last_element = numbers[len(numbers) - 1 - i]
+def run(numbers, max_numbers, count_per_draw):
+    for i in range(0, count_per_draw):
+        rand_index = random.randint(0, max_numbers - i)
+        numbers[rand_index], numbers[max_numbers - i] = numbers[max_numbers - i], numbers[rand_index]
 
-        numbers[rand_index] = last_element
-        numbers[len(numbers) - 1 - i] = rand_element
-
-    return numbers[len(numbers) - 6:len(numbers)]
+    return numbers[-count_per_draw:]
 
 
 if __name__ == "__main__":
-    main()
+    print(main())
